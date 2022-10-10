@@ -107,9 +107,10 @@ with open('books.csv', encoding='windows-1251') as f:
     reader = csv.DictReader(f, delimiter=';', quotechar='"')
     books = list(reader)
 
-less_and_equal_50 = len(list(filter(lambda x: float(x['Цена поступления']) <= 50, books)))
-more_50 = len(list(filter(lambda x: float(x['Цена поступления']) > 50, books)))
-less_and_equal_50, more_50 = str(round(less_and_equal_50 * 100 / more_50, 1)) + ' ', str(100) + '  '
+lae_50 = len(list(filter(lambda x: float(x['Цена поступления'].replace(',', '.')) <= 50, books)))
+m_50 = len(list(filter(lambda x: float(x['Цена поступления'].replace(',', '.')) > 50, books)))
+more_50 = str(100 - round(lae_50 * 100 / m_50, 1)) + '  '
+less_and_equal_50 = str(round(lae_50 * 100 / m_50, 1)) + '  '
 spaces = max(len(str(less_and_equal_50)), len(str(more_50))) * ' '
 to_black, to_white = lambda a: BLACK + a + END, lambda a: WHITE + a + END
 
@@ -125,7 +126,7 @@ graphics = [
     [to_white(spaces), to_white(spaces), to_white(spaces), to_black(spaces)],
     [to_white(less_and_equal_50), to_black(spaces), to_white(spaces), to_black(spaces)],
     [to_white(spaces), to_black(spaces), to_white(spaces), to_black(spaces)],
-    [to_white(spaces), to_white(' ≤50 '), to_white(spaces), to_white(' >50 ')]
+    [to_white(spaces + ' '), to_white('≤ 50 '), to_white(spaces + ' '), to_white('> 50 ')]
 ]
 
 print('\n'.join([''.join(line) for line in graphics]))
